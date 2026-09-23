@@ -40,6 +40,50 @@
         border-bottom: 1px solid var(--line);
       }
 
+      .header-inner {
+        max-width: 880px;
+        margin: 0 auto;
+      }
+
+      .title-wrap {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 18px;
+      }
+
+      .meta-stack {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 8px;
+        margin-top: 18px;
+      }
+
+      .beta-badge {
+        padding: 6px 10px;
+        border: 1px solid var(--line);
+        font-size: 9px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        white-space: nowrap;
+        color: var(--text);
+        background: #ffffff;
+      }
+
+      .disclaimer-box {
+        max-width: 240px;
+        padding: 6px 8px;
+        border: 1px solid var(--line);
+        background: #ffffff;
+        color: var(--muted);
+        font-size: 7.5px;
+        line-height: 1.45;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        text-align: left;
+      }
+
       section {
         max-width: 880px;
         margin: 0 auto;
@@ -152,17 +196,27 @@
   </head>
   <body>
     <header>
-      <p>Project overview</p>
-      <h1>Jarvis Jr</h1>
-      <p>
-        Jarvis Jr is not a monolithic chatbot. It is a layered personal AI assistant built in Python to route requests,
-        remember context, execute tools, and interact with a real desktop environment in a controlled way.
-      </p>
-      <p>
-        The implementation is grounded in the actual project structure: orchestration in app/jarvis.py, routing in
-        core/router.py, semantic intent analysis in core/semantic_dispatcher.py, planning in agents/supervisor.py,
-        memory coordination in memory/manager.py, and verification in verification/engine.py.
-      </p>
+      <div class="header-inner">
+        <div class="title-wrap">
+          <div>
+            <p>Project overview</p>
+            <h1>Jarvis Jr</h1>
+          </div>
+          <div class="meta-stack">
+            <div class="beta-badge">Jarvis JS · beta</div>
+            <div class="disclaimer-box">Beta build: still rough, buggy, and improving.</div>
+          </div>
+        </div>
+        <p>
+          Jarvis Jr is not a monolithic chatbot. It is a layered personal AI assistant built in Python to route requests,
+          remember context, execute tools, and interact with a real desktop environment in a controlled way.
+        </p>
+        <p>
+          The implementation is grounded in the actual project structure: orchestration in app/jarvis.py, routing in
+          core/router.py, semantic intent analysis in core/semantic_dispatcher.py, planning in agents/supervisor.py,
+          memory coordination in memory/manager.py, and verification in verification/engine.py.
+        </p>
+      </div>
     </header>
 
     <main>
@@ -374,6 +428,7 @@
           This page stays static and presentation-ready, while staying faithful to the actual implementation in the codebase.
         </p>
       </section>
+
     </main>
 
     <footer>
