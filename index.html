@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jarvis Jr</title>
+    <meta
+      name="description"
+      content="Jarvis Jr is a layered personal AI assistant built in Python for memory, orchestration, tool execution, and desktop control."
+    />
+    <style>
+      :root {
+        --bg: #ffffff;
+        --text: #111111;
+        --muted: #3d3d3d;
+        --line: #d8d8d8;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: Arial, Helvetica, sans-serif;
+        line-height: 1.7;
+        letter-spacing: 0.01em;
+      }
+
+      header,
+      main {
+        max-width: 880px;
+        margin: 0 auto;
+      }
+
+      header {
+        padding: 56px 20px 18px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      section {
+        max-width: 880px;
+        margin: 0 auto;
+        border-top: 1px solid var(--line);
+        padding: 18px 20px 10px;
+      }
+
+      footer {
+        max-width: 880px;
+        margin: 18px auto 0;
+        padding: 18px 20px 42px;
+        border-top: 1px solid var(--line);
+      }
+
+      .footer-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+      }
+
+      .socials {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+
+      .socials a,
+      .coffee-btn {
+        color: var(--text);
+        text-decoration: none;
+        font-size: 13px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .coffee-btn {
+        display: inline-block;
+        padding: 10px 16px;
+        border: 1px solid var(--text);
+        background: #111111;
+        color: #ffffff;
+        transition: opacity 0.2s ease;
+      }
+
+      .coffee-btn:hover {
+        opacity: 0.9;
+      }
+
+      p,
+      li {
+        margin: 0 0 14px;
+        color: var(--muted);
+        font-size: 15px;
+      }
+
+      h1,
+      h2,
+      h3,
+      p:first-of-type {
+        margin-top: 0;
+      }
+
+      h1 {
+        margin: 10px 0 18px;
+        font-size: clamp(36px, 6vw, 70px);
+        line-height: 0.95;
+        letter-spacing: -0.06em;
+        font-weight: 700;
+      }
+
+      h2 {
+        margin: 0 0 16px;
+        font-size: 22px;
+        line-height: 1.2;
+        letter-spacing: -0.04em;
+      }
+
+      h3 {
+        margin: 0 0 8px;
+        font-size: 18px;
+      }
+
+      .kicker,
+      header > p:first-of-type,
+      section > p:first-of-type {
+        margin: 0;
+        font-size: 11px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--text);
+      }
+
+      ul,
+      ol {
+        margin: 0 0 12px;
+        padding-left: 20px;
+      }
+
+      code {
+        font-family: "SFMono-Regular", Consolas, monospace;
+        font-size: 12px;
+        color: #111111;
+        background: #f5f5f5;
+        border: 1px solid var(--line);
+        padding: 2px 6px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <p>Project overview</p>
+      <h1>Jarvis Jr</h1>
+      <p>
+        Jarvis Jr is not a monolithic chatbot. It is a layered personal AI assistant built in Python to route requests,
+        remember context, execute tools, and interact with a real desktop environment in a controlled way.
+      </p>
+      <p>
+        The implementation is grounded in the actual project structure: orchestration in app/jarvis.py, routing in
+        core/router.py, semantic intent analysis in core/semantic_dispatcher.py, planning in agents/supervisor.py,
+        memory coordination in memory/manager.py, and verification in verification/engine.py.
+      </p>
+    </header>
+
+    <main>
+      <section>
+        <p>1. System thesis</p>
+        <h2>What the project is actually trying to build</h2>
+        <p>
+          Jarvis Jr is designed as an agentic personal assistant rather than a text-only wrapper around an LLM. It receives
+          a natural-language request, classifies the intent, decides whether the task is a simple Q&amp;A or a real
+          operation, and then chooses a safe execution path.
+        </p>
+        <p>
+          That means the system combines conversation, memory, planning, tool calling, environment control, and
+          verification. The model is one component of a larger runtime, not the entire system.
+        </p>
+        <p>
+          The core design principle is simple: reasoning is useful, but execution must be validated. If the assistant can
+          open an app, navigate a browser, manipulate the screen, or write files, those actions need real control boundaries
+          and evidence-based verification.
+        </p>
+      </section>
+
+      <section>
+        <p>2. Execution model</p>
+        <h2>Request lifecycle</h2>
+        <ol>
+          <li>Input: the user message enters the main runtime in app/jarvis.py.</li>
+          <li>Normalization: speech slips and wording variants are cleaned before routing.</li>
+          <li>Capability routing: the router decides whether the request is math, browser, app, Spotify, screen-aware, or compound.</li>
+          <li>Semantic dispatch: the semantic dispatcher builds a structured intent and extracts target sites, search queries, and equations.</li>
+          <li>Fast path or supervisor: simple requests may answer directly, while complex requests are decomposed into a task graph.</li>
+          <li>Tool execution: the executor validates calls, checks policies, and runs the tool handler.</li>
+          <li>Verification: the system checks whether the side effects actually happened before reporting success.</li>
+          <li>Memory and state update: session memory, task memory, and long-term memory records are written as needed.</li>
+        </ol>
+      </section>
+
+      <section>
+        <p>3. Routing and intent understanding</p>
+        <h2>How the system decides what kind of request it is</h2>
+        <p>
+          The routing layer is intentionally broad. In core/router.py, the system checks for math queries, screen-referent
+          queries, Spotify playback, browser and navigation intent, file operations, app-launch commands, messaging tasks,
+          and compound tasks.
+        </p>
+        <p>
+          This is not just a keyword classifier. It decides the top-level execution route before deeper logic runs. If a
+          request mentions the current screen, it can be routed toward vision and UI-grounding tasks. If it is a direct
+          question, it may prefer a fast spoken answer path.
+        </p>
+        <p>
+          The semantic dispatcher in core/semantic_dispatcher.py goes one level deeper by producing a structured intent
+          payload. It extracts slots such as search_query, target_site, equation, and os_action so downstream code can
+          operate deterministically.
+        </p>
+      </section>
+
+      <section>
+        <p>4. Supervisor and task graph</p>
+        <h2>How multi-step work is planned</h2>
+        <p>
+          Complex tasks are not handled by one giant prompt. The project includes a supervisor engine in agents/supervisor.py
+          that breaks requests into a task graph with dependencies and retry logic.
+        </p>
+        <ul>
+          <li>Each task is assigned a node in a dependency graph.</li>
+          <li>Independent tasks can run in parallel through a thread pool.</li>
+          <li>Workers execute isolated task goals instead of sharing a single monolithic context.</li>
+          <li>Stuck or timed-out tasks can be retried or reset to a safe state.</li>
+          <li>Checkpoints are saved so interrupted execution can be resumed.</li>
+        </ul>
+      </section>
+
+      <section>
+        <p>5. Memory architecture</p>
+        <h2>How the assistant remembers user facts and task state</h2>
+        <p>
+          Memory is one of the strongest parts of this project because it is explicitly structured around scopes and
+          provenance. The main logic sits in memory/manager.py, with persistent storage in memory/store.py, schema
+          definitions in memory/schema.py, and user-specific facts in memory/user_preferences.py.
+        </p>
+        <ul>
+          <li>Working memory holds active task state and immediate context.</li>
+          <li>Task memory records the goal, plan, and execution checkpoints.</li>
+          <li>Episodic memory captures events and prior interactions.</li>
+          <li>User preferences store durable personal facts and settings.</li>
+          <li>Long-term memory keeps durable records with metadata, tags, and provenance.</li>
+        </ul>
+      </section>
+
+      <section>
+        <p>6. Tool execution and security</p>
+        <h2>How actions are controlled</h2>
+        <p>
+          The runtime does not blindly run a tool call just because a model suggested it. The tool pipeline is defined in
+          tools/executor.py, with permission logic in security/permission_engine.py.
+        </p>
+        <ul>
+          <li>Tool calls are resolved from a registry instead of being executed ad hoc.</li>
+          <li>Arguments are validated before execution.</li>
+          <li>Quota and sandbox checks are enforced.</li>
+          <li>Risk levels can require confirmation or policy denial.</li>
+          <li>Elevated access is tracked through explicit leases instead of implicit trust.</li>
+        </ul>
+      </section>
+
+      <section>
+        <p>7. Platform and interface layers</p>
+        <h2>Desktop, browser, and OS integration</h2>
+        <p>
+          Jarvis Jr is not limited to text. It integrates with the desktop environment through a platform abstraction,
+          browser automation, and computer-control modules.
+        </p>
+        <ul>
+          <li>browser/ manages navigation, tab reuse, and browser operations.</li>
+          <li>computer/ handles screen interaction and control actions.</li>
+          <li>vision/ supports visual interpretation and screen inspection tasks.</li>
+          <li>platform_layer/ provides Windows and Linux-specific execution differences.</li>
+          <li>voice/ handles the speech pipeline for listening and speaking.</li>
+        </ul>
+      </section>
+
+      <section>
+        <p>8. Verification and truthfulness</p>
+        <h2>It does not assume success just because the model said so</h2>
+        <p>
+          A major strength of this project is the verification layer in verification/engine.py. The system checks for real
+          environment evidence before treating an action as complete.
+        </p>
+        <ul>
+          <li>File existence and file size can be verified.</li>
+          <li>Window and process state can be checked against the OS.</li>
+          <li>HTTP reachability and URLs can be validated.</li>
+          <li>Desktop and screen changes can be compared to actual artifacts.</li>
+        </ul>
+      </section>
+
+      <section>
+        <p>9. Recovery and resilience</p>
+        <h2>Failure handling is built into the architecture</h2>
+        <p>
+          The runtime includes recovery, retry, and checkpointing logic to handle partial failures and interrupted work. In
+          the supervisor workflow, tasks are tracked with states, can be retried, and may resume from a stored checkpoint.
+        </p>
+        <p>
+          The project is therefore designed around iterative execution instead of assuming every task completes on the first
+          pass. This is especially important for long-running or real-world desktop automation tasks, where the environment
+          can change while an action is in progress.
+        </p>
+      </section>
+
+      <section>
+        <p>10. Model layer and provider abstraction</p>
+        <h2>AI backend abstraction</h2>
+        <p>
+          The model layer is abstracted through models/base.py, with cloud and local implementation paths such as
+          models/cloud_provider.py and models/ollama_provider.py. This keeps the orchestration code independent from one
+          provider or vendor.
+        </p>
+        <p>
+          In other words, the assistant can be configured around different inference backends while preserving a common
+          contract for generation, streaming, and structured outputs. The runtime is not locked to a single model API.
+        </p>
+      </section>
+
+      <section>
+        <p>11. Storage and runtime data</p>
+        <h2>Where information lives</h2>
+        <p>
+          The project stores state and memory in a structured local folder system managed by configuration in
+          config/settings.py. This keeps memory, session data, and runtime context separate from the codebase, while still
+          making it easy to inspect and debug.
+        </p>
+        <p>
+          In a practical sense, the assistant has a persistent data layer for memory and preferences, a task-state layer
+          for execution checkpoints, and a runtime environment layer for validation and platform state. These are distinct
+          concerns and they are treated differently.
+        </p>
+      </section>
+
+      <section>
+        <p>12. What it is not</p>
+        <h2>Important limits and honest framing</h2>
+        <p>
+          Jarvis Jr is not a full AGI system, and it is not pretending to be one. It is a practical, layered assistant
+          architecture for a user’s computer and workflow. It can handle many real tasks, but it still depends on the
+          quality of the model backend, the environment, the OS integration, and the validation rules around each decision.
+        </p>
+        <p>
+          Its strength is not magical reasoning alone. Its strength is in combining multiple subsystems: routing, memory,
+          control, verification, recovery, and platform integration. That is the actual design argument behind the project.
+        </p>
+      </section>
+
+      <section>
+        <p>Final statement</p>
+        <h2>Why this architecture matters</h2>
+        <p>
+          Jarvis Jr is best understood as an agentic desktop runtime rather than a generic AI chat demo. It takes input,
+          reasons about intent, routes the task appropriately, persists relevant state, executes tools through a security
+          layer, verifies external effects, and keeps the system honest through environment-grounded checks.
+        </p>
+        <p>
+          That combination is what makes it technically interesting: it resembles the shape of a real assistant system,
+          not just a single prompt wrapper. The project is deliberately layered so that each capability has a clear place,
+          a clear responsibility, and a clear boundary.
+        </p>
+        <p>
+          This page stays static and presentation-ready, while staying faithful to the actual implementation in the codebase.
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer-row">
+        <div class="socials">
+          <a href="https://www.linkedin.com/in/madhav-kannan-k-cit/" target="_blank" rel="noreferrer">LinkedIn</a>
+          <a href="https://www.instagram.com/maddy.clasher/" target="_blank" rel="noreferrer">Instagram</a>
+          <a href="https://github.com/Madhavkannank" target="_blank" rel="noreferrer">GitHub</a>
+        </div>
+        <a
+          class="coffee-btn"
+          href="upi://pay?pa=6383908577@fam&pn=Your%20Name&tn=Buy%20me%20a%20coffee&am=0&cu=INR"
+          target="_self"
+          rel="noreferrer"
+        >
+          Buy me a coffee
+        </a>
+      </div>
+    </footer>
+  </body>
+</html>
