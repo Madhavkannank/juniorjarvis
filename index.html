@@ -439,22 +439,31 @@
           <a href="https://github.com/Madhavkannank" target="_blank" rel="noreferrer">GitHub</a>
         </div>
         <a
+          id="coffee-btn-link"
           class="coffee-btn"
           href="upi://pay?pa=6383908577@fam&pn=Your%20Name&tn=Buy%20me%20a%20coffee&am=0&cu=INR"
           target="_self"
           rel="noreferrer"
         >
-          Buy me a coffee (Mobile)
-        </a>
-        <a
-          class="coffee-btn"
-          href="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=upi%3A%2F%2Fpay%3Fpa%3D6383908577%40fam%26pn%3DYour%2520Name%26tn%3DBuy%2520me%2520a%2520coffee%26am%3D0%26cu%3DINR"
-          target="_blank"
-          rel="noreferrer"
-        >
-          Buy me a coffee (PC)
+          Buy me a coffee
         </a>
       </div>
     </footer>
+    <script>
+      (function () {
+        var coffeeBtn = document.getElementById("coffee-btn-link");
+        if (!coffeeBtn) return;
+
+        var mobileUpi = "upi://pay?pa=6383908577@fam&pn=Your%20Name&tn=Buy%20me%20a%20coffee&am=0&cu=INR";
+        var desktopQr = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=upi%3A%2F%2Fpay%3Fpa%3D6383908577%40fam%26pn%3DYour%2520Name%26tn%3DBuy%2520me%2520a%2520coffee%26am%3D0%26cu%3DINR";
+
+        var isMobile =
+          /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) ||
+          (window.matchMedia && window.matchMedia("(pointer: coarse)").matches);
+
+        coffeeBtn.href = isMobile ? mobileUpi : desktopQr;
+        coffeeBtn.target = isMobile ? "_self" : "_blank";
+      })();
+    </script>
   </body>
 </html>
